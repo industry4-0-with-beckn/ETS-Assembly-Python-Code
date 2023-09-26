@@ -118,6 +118,7 @@ def disconnect_opcua():
 
 @app.route('/set_color', methods=['POST'])
 def set_color():
+    global selected_color
     if request.method == 'POST':
         try:
             # Check if the OPC UA client (root) is connected
@@ -146,6 +147,17 @@ def set_color():
         except Exception as e:
             status_color = f'Error setting color: {str(e)}'
         return render_template('index.html', status_color=status_color)
+        
+@app.route('/set_color_status', methods=['GET'])
+def set_color_status():
+    try:
+        selected_color_status = selected_color
+        if selected_color_status == 1:
+            return jsonify({'selected_color_status': 'Red'})
+        elif selected_color_status == 4:
+            return jsonify({'selected_color_status': 'Blue'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500  # Handle errors gracefully and return a 500 status code
 
 @app.route('/get_order_status', methods=['GET'])
 def get_order_status():
@@ -156,75 +168,101 @@ def get_order_status():
     except Exception as e:
         return jsonify({'error': str(e)}), 500  # Handle errors gracefully and return a 500 status code
 
+@app.route('/set_quantity', methods=['POST'])
+def set_quantity():
+    global selected_quantity
+    if request.method == 'POST':
+        try:
+            # Check if the OPC UA client (root) is connected
+            if root_ControlStation is None:
+                status_quantity = 'Error: OPC UA client is not connected. Connect first.'
+            else:
+                # Get the selected quantity from the form
+                selected_quantity = int(request.form['quantity'])
+                status_quantity = f'Quantity set to {selected_quantity}'
+        except Exception as e:
+            status_quantity = f'Error setting color: {str(e)}'
+        return render_template('index.html', status_quantity=status_quantity)
+ 
+
+@app.route('/set_quantity_status', methods=['GET'])
+def set_quantity_status():
+    try:
+        selected_quantity_status = selected_quantity
+        return jsonify({'selected_quantity_status': selected_quantity_status})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500  # Handle errors gracefully and return a 500 status code
+
 @app.route('/process_order', methods=['POST'])
 def process_order():
     global Assembly_Status
     Assembly_Status = 'Order provided for processing'
-    Pallet_Storage_1 = root_PalletStore.get_children()[0].get_children()[4].get_children()[5].get_value()
-    Pallet_Storage_2 = root_PalletStore.get_children()[0].get_children()[4].get_children()[6].get_value()
-
     if request.method == 'POST':
-        try:
-            # Check if the order status is true
-            order_status = root_ControlStation.get_children()[0].get_children()[4].get_children()[8].get_value()
-            # Check if the Pallet storage has 10 pallets or 0 pallet
-            if Pallet_Storage_1 == 10:
-                return jsonify({'message':'Order cannot be placed. The Pallets in the pallet storage must be less than 10'})
-            elif Pallet_Storage_1 == 0:
-                return jsonify({'message':'Order cannot be placed. Add Pallets to the pallet storage'})
-            elif Pallet_Storage_2 == 12:
-                return jsonify({'message': 'Order cannot be placed. Empty the Pallets from pallet storage 2'})
-
-            if order_status:
-                # Give the order if the status is true
-                give_order_true = opcua.ua.DataValue(opcua.ua.Variant(True, opcua.ua.VariantType.Boolean))
-                give_order_true.ServerTimestamp = None
-                give_order_true.SourceTimestamp = None
-                root_ControlStation.get_children()[0].get_children()[4].get_children()[6].set_value(give_order_true)
+        try:      
+            for quantity in range(selected_quantity):
+                order_status = root_ControlStation.get_children()[0].get_children()[4].get_children()[8].get_value()
+                if order_status:
+                    Pallet_Storage_1 = root_PalletStore.get_children()[0].get_children()[4].get_children()[5].get_value()
+                    Pallet_Storage_2 = root_PalletStore.get_children()[0].get_children()[4].get_children()[6].get_value()
+                    # Check if the Pallet storage has 10 pallets or 0 pallet
+                    if Pallet_Storage_1 == 10:
+                        return jsonify({'message':'Order cannot be placed. The Pallets in the pallet storage must be less than 10'})
+                    elif Pallet_Storage_1 == 0:
+                        return jsonify({'message':'Order cannot be placed. Add Pallets to the pallet storage'})
+                    elif Pallet_Storage_2 == 12:
+                        return jsonify({'message': 'Order cannot be placed. Empty the Pallets from pallet storage 2'}) 
+                    # Give the order if the status is true
+                    give_order_true = opcua.ua.DataValue(opcua.ua.Variant(True, opcua.ua.VariantType.Boolean))
+                    give_order_true.ServerTimestamp = None
+                    give_order_true.SourceTimestamp = None
+                    root_ControlStation.get_children()[0].get_children()[4].get_children()[6].set_value(give_order_true)
                 
-                while root_PalletStore.get_children()[0].get_children()[4].get_children()[3].get_value() != 2:
-                    pass
-                Assembly_Status = "Assembly Process has started."
+                    while root_PalletStore.get_children()[0].get_children()[4].get_children()[3].get_value() != 2:
+                        pass
+                    Assembly_Status = "Assembly Process has started."
 
-                while root_ControlStation.get_children()[0].get_children()[4].get_children()[7].get_value() != True:
-                    pass
-                give_order_false = opcua.ua.DataValue(opcua.ua.Variant(False, opcua.ua.VariantType.Boolean))
-                give_order_false.ServerTimestamp = None
-                give_order_false.SourceTimestamp = None
-                root_ControlStation.get_children()[0].get_children()[4].get_children()[6].set_value(give_order_false) 
+                    while root_ControlStation.get_children()[0].get_children()[4].get_children()[7].get_value() != True:
+                        pass
+                    give_order_false = opcua.ua.DataValue(opcua.ua.Variant(False, opcua.ua.VariantType.Boolean))
+                    give_order_false.ServerTimestamp = None
+                    give_order_false.SourceTimestamp = None
+                    root_ControlStation.get_children()[0].get_children()[4].get_children()[6].set_value(give_order_false) 
 
-                while root_PalletStore.get_children()[0].get_children()[4].get_children()[3].get_value() != 4:
-                    pass
-                Assembly_Status = "Palet is successfully moved to the handling process"
+                    while root_PalletStore.get_children()[0].get_children()[4].get_children()[3].get_value() != 4:
+                        pass
+                    Assembly_Status = "Palet is successfully moved to the handling process"
 
-                while  root_Handling.get_children()[0].get_children()[4].get_children()[3].get_value() == 0:
-                    pass
-                Assembly_Status = "Handling process has started" 
+                    while  root_Handling.get_children()[0].get_children()[4].get_children()[3].get_value() == 0:
+                        pass
+                    Assembly_Status = "Handling process has started" 
 
-                while  root_Handling.get_children()[0].get_children()[4].get_children()[3].get_value() != 0:
-                    pass
-                Assembly_Status = "Handling process has successfully completed" 
+                    while  root_Handling.get_children()[0].get_children()[4].get_children()[3].get_value() != 0:
+                        pass
+                    Assembly_Status = "Handling process has successfully completed" 
                    
-                while  root_Press.get_children()[0].get_children()[4].get_children()[3].get_value() == 0:
-                    pass
-                Assembly_Status = "Lid pressing process has started" 
+                    while  root_Press.get_children()[0].get_children()[4].get_children()[3].get_value() == 0:
+                        pass
+                    Assembly_Status = "Lid pressing process has started" 
 
-                while root_Press.get_children()[0].get_children()[4].get_children()[3].get_value() != 4:
-                    pass
-                Assembly_Status = "Lid pressing process has successfully completed" 
+                    while root_Press.get_children()[0].get_children()[4].get_children()[3].get_value() != 4:
+                        pass
+                    Assembly_Status = "Lid pressing process has successfully completed" 
                             
-                while root_PalletStore.get_children()[0].get_children()[4].get_children()[3].get_value() != 2:
-                    pass
-                Assembly_Status = "The assembled box is successfully stored in the pallet storage" 
-                time.sleep(5) # Waiting for the Palet storage to update its values
-                if (root_PalletStore.get_children()[0].get_children()[4].get_children()[6].get_value() == (Pallet_Storage_2 + 1)) and (root_PalletStore.get_children()[0].get_children()[4].get_children()[5].get_value() == (Pallet_Storage_1 - 1)): 
-                    Assembly_Status = "Assembly process finished"
-                    return jsonify({'message': 'The order is successfully completed'})                   
+                    while root_PalletStore.get_children()[0].get_children()[4].get_children()[3].get_value() != 2:
+                        pass
+                    Assembly_Status = "The assembled box is successfully stored in the pallet storage" 
+                    time.sleep(5) # Waiting for the Palet storage to update its values
+                    if (root_PalletStore.get_children()[0].get_children()[4].get_children()[6].get_value() == (Pallet_Storage_2 + 1)) and (root_PalletStore.get_children()[0].get_children()[4].get_children()[5].get_value() == (Pallet_Storage_1 - 1)): 
+                        Assembly_Status = "Assembly process finished"
+                        if(quantity == selected_quantity):
+                            return jsonify({'message': 'The order is successfully completed'})                   
+                    else:
+                        Assembly_Status = "Assembly process not completed successfully" 
+                        return jsonify({'message': 'The order is not completed successfully'})  
+                    # Giving delay to the next order to start    
+                    time.sleep(10)                 
                 else:
-                    Assembly_Status = "Assembly process not completed successfully" 
-                    return jsonify({'message': 'The order is not completed successfully'})                   
-            else:
-                return jsonify({'message': 'Order status is not true. Cannot give an order.'})
+                    return jsonify({'message': 'Order status is not true. Cannot give an order.'})
         except Exception as e:
             return jsonify({'error': str(e)}), 500  # Handle errors gracefully and return a 500 status code
 

@@ -26,6 +26,12 @@
         <button type="submit">Set Color</button>
     </form>
 
+    <form method="POST" action="/set_quantity">
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" required>
+        <button type="submit">Set Quantity</button>
+    </form>
+
     <div id="status_message">
         {% if status %}
             <p>{{ status|safe }}</p>
@@ -36,6 +42,20 @@
         {% if status_color %}
             <p>{{ status_color }}</p>
         {% endif %}
+    </div>
+
+    <div id="status_message">
+        {% if status_quantity %}
+            <p>{{ status_quantity }}</p>
+        {% endif %}
+    </div>
+
+    <div id="selected_quantity_status">
+        <p>The quantity is: <span id="status_quantity"></span></p>
+    </div>
+
+    <div id="selected_color_status">
+        <p>The selected Color: <span id="status_color"></span></p>
     </div>
 
     <div id="order_status">

@@ -10,9 +10,38 @@ function updateOrderStatus() {
         })
         .catch(error => console.error('Error fetching order status:', error));
 }
-
 // Periodically update the order status (e.g., every 1 seconds)
 setInterval(updateOrderStatus, 1000);
+
+function updateColorStatus() {
+    fetch('/set_color_status')  // Create a route to fetch the order status from the server
+        .then(response => response.json())
+        .then(data => {
+            const setColor = data.selected_color_status;
+            const statusText = document.querySelector('#status_color');
+
+            // Update the text content of the <span> element based on the order status value
+            statusText.textContent = setColor;
+        })
+        .catch(error => console.error('Error fetching order status:', error));
+}
+// Periodically update the order status (e.g., every 1 seconds)
+setInterval(updateColorStatus, 1000);
+
+function updateQuantityStatus() {
+    fetch('/set_quantity_status')  // Create a route to fetch the order status from the server
+        .then(response => response.json())
+        .then(data => {
+            const setQuantity = data.selected_quantity_status;
+            const statusText = document.querySelector('#status_quantity');
+
+            // Update the text content of the <span> element based on the order status value
+            statusText.textContent = setQuantity;
+        })
+        .catch(error => console.error('Error fetching order status:', error));
+}
+// Periodically update the order status (e.g., every 1 seconds)
+setInterval(updateQuantityStatus, 1000);
 
 function updateAssemblyStep() {
     fetch('/get_assembly_step')  // Create a route to fetch the order status from the server
