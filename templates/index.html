@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<meta charset="UTF-8">
+<title>OPC UA Client</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>OPC UA Client</h1>
+
+    <form method="POST" action="/connect">
+        <button type="submit">Connect</button>
+    </form>
+
+    <form method="POST" action="/disconnect">
+        <button type="submit">Disconnect</button>
+    </form>
+
+    <form method="POST" action="/set_color">
+        <label for="color">Select a color:</label>
+        <select id="color" name="color">
+            <option value="1">Red</option>
+            <option value="4">Blue</option>
+        </select>
+        <button type="submit">Set Color</button>
+    </form>
+
+    <div id="status_message">
+        {% if status %}
+            <p>{{ status|safe }}</p>
+        {% endif %}
+    </div>
+
+    <div id="status_message">
+        {% if status_color %}
+            <p>{{ status_color }}</p>
+        {% endif %}
+    </div>
+
+    <div id="order_status">
+        <p>Order Possible: <span id="status_text"></span></p>
+    </div>
+
+    <form method="POST" action="/process_order">
+        <button type="submit">Process Order</button>
+    </form>
+    <div id="Assembly_Step">
+        <p>Assembly Satus: <span id="step_text"></span></p>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/status.js') }}"></script>
+
+{% endblock %}
