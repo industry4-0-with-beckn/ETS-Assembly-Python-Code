@@ -3,7 +3,7 @@ function updateOrderStatus() {
         .then(response => response.json())
         .then(data => {
             const orderStatus = data.order_status;
-            const statusText = document.querySelector('#status_text');
+            const statusText = document.querySelector('#status_update');
 
             // Update the text content of the <span> element based on the order status value
             statusText.textContent = orderStatus;
@@ -42,6 +42,22 @@ function updateQuantityStatus() {
 }
 // Periodically update the order status (e.g., every 1 seconds)
 setInterval(updateQuantityStatus, 1000);
+
+
+function updateOrderNumberStatus() {
+    fetch('/get_OrderNumber_status')  // Create a route to fetch the order status from the server
+        .then(response => response.json())
+        .then(data => {
+            const setOrder = data.order_number_status;
+            const statusText = document.querySelector('#status_order_number');
+
+            // Update the text content of the <span> element based on the order status value
+            statusText.textContent = setOrder;
+        })
+        .catch(error => console.error('Error fetching order status:', error));
+}
+// Periodically update the order status (e.g., every 1 seconds)
+setInterval(updateOrderNumberStatus, 1000);
 
 function updateAssemblyStep() {
     fetch('/get_assembly_step')  // Create a route to fetch the order status from the server

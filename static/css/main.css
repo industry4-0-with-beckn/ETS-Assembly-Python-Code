@@ -1,32 +1,94 @@
-/* styles.css */
+/* Global Styles */
+
 body {
     font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
     text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
 }
 
-h1 {
+/* Title Section */
+.title {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Action Buttons Section */
+.action-buttons {
     margin-top: 20px;
 }
 
-form {
-    margin-top: 20px;
-}
-
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #007bff;
+.action-button {
+    background-color: #3498db;
     color: #fff;
     border: none;
-    border-radius: 5px;
+    padding: 12px 24px;
+    margin: 10px;
     cursor: pointer;
-    margin-right: 10px;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: #0056b3;
+.action-button:hover {
+    background-color: #2980b9;
 }
 
-#status_message {
+/* Color and Quantity Selection Section */
+.selection-section {
+    margin-top: 20px;
+}
+
+.select-color {
+    padding: 12px;
+    margin: 10px;
+    font-size: 16px;
+}
+
+.input-quantity {
+    padding: 12px;
+    margin: 10px;
+    width: 100px;
+    font-size: 16px;
+}
+
+/* Status Messages Section */
+.status-messages {
+    background-color: #f7f7f7;
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.status-text {
+    font-size: 18px;
+    margin: 10px;
+    color: #333;
+}
+
+/* Order Status Section */
+.order-status {
+    background-color: #f7f7f7;
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+/* Assembly Status Section */
+.assembly-status {
+    background-color: #f7f7f7;
+    padding: 12px;
+    border-radius: 10px;
     margin-top: 20px;
 }

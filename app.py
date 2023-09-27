@@ -8,6 +8,7 @@ import datetime
 import configparser
 import pandas as pd
 import time
+import random
 
 app = Flask(__name__)
 
@@ -193,15 +194,32 @@ def set_quantity_status():
     except Exception as e:
         return jsonify({'error': str(e)}), 500  # Handle errors gracefully and return a 500 status code
 
+@app.route('/get_OrderNumber_status', methods=['GET'])
+def get_OrderNumber_status():
+    try:
+        order_number_status = Order_Number
+        return jsonify({'order_number_status': order_number_status})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500  # Handle errors gracefully and return a 500 status code
+
 @app.route('/process_order', methods=['POST'])
 def process_order():
     global Assembly_Status
-    Assembly_Status = 'Order provided for processing'
+    global Order_Number
+    Order_Number = random.randint(1000,9999)
+    # Setting the order number 
+    dv_order = opcua.ua.DataValue(opcua.ua.Variant(Order_Number, opcua.ua.VariantType.Int16))
+    dv_order.ServerTimestamp = None
+    dv_order.SourceTimestamp = None
+    # Setting the order value
+    root_ControlStation.get_children()[0].get_children()[4].get_children()[0].set_value(dv_order)
+    Assembly_Status = f"Assembly process started for the Order Number:  {Order_Number}."
+    time.sleep(5)
     if request.method == 'POST':
         try:      
-            for quantity in range(selected_quantity):
-                order_status = root_ControlStation.get_children()[0].get_children()[4].get_children()[8].get_value()
-                if order_status:
+            for quantity in range(1,selected_quantity+1):
+                order_status_check = root_ControlStation.get_children()[0].get_children()[4].get_children()[8].get_value()
+                if order_status_check:
                     Pallet_Storage_1 = root_PalletStore.get_children()[0].get_children()[4].get_children()[5].get_value()
                     Pallet_Storage_2 = root_PalletStore.get_children()[0].get_children()[4].get_children()[6].get_value()
                     # Check if the Pallet storage has 10 pallets or 0 pallet
@@ -215,11 +233,10 @@ def process_order():
                     give_order_true = opcua.ua.DataValue(opcua.ua.Variant(True, opcua.ua.VariantType.Boolean))
                     give_order_true.ServerTimestamp = None
                     give_order_true.SourceTimestamp = None
-                    root_ControlStation.get_children()[0].get_children()[4].get_children()[6].set_value(give_order_true)
-                
+                    root_ControlStation.get_children()[0].get_children()[4].get_children()[6].set_value(give_order_true)                
                     while root_PalletStore.get_children()[0].get_children()[4].get_children()[3].get_value() != 2:
                         pass
-                    Assembly_Status = "Assembly Process has started."
+                    Assembly_Status = f"Process has started for Box Number {quantity}."
 
                     while root_ControlStation.get_children()[0].get_children()[4].get_children()[7].get_value() != True:
                         pass
@@ -253,14 +270,16 @@ def process_order():
                     Assembly_Status = "The assembled box is successfully stored in the pallet storage" 
                     time.sleep(5) # Waiting for the Palet storage to update its values
                     if (root_PalletStore.get_children()[0].get_children()[4].get_children()[6].get_value() == (Pallet_Storage_2 + 1)) and (root_PalletStore.get_children()[0].get_children()[4].get_children()[5].get_value() == (Pallet_Storage_1 - 1)): 
-                        Assembly_Status = "Assembly process finished"
+                        Assembly_Status = f"Box Number {quantity} is successfully assembled"
                         if(quantity == selected_quantity):
-                            return jsonify({'message': 'The order is successfully completed'})                   
+                            Assembly_Status = 'No order for processing'
+                            return jsonify({'message': f"The Order number {Order_Number} is successfully completed"})                   
                     else:
                         Assembly_Status = "Assembly process not completed successfully" 
-                        return jsonify({'message': 'The order is not completed successfully'})  
+                        Assembly_Status = 'No order for processing'
+                        return jsonify({'message': f"The Order number {Order_Number} cannot be completed due to some error"})  
                     # Giving delay to the next order to start    
-                    time.sleep(10)                 
+                    time.sleep(5)                 
                 else:
                     return jsonify({'message': 'Order status is not true. Cannot give an order.'})
         except Exception as e:
