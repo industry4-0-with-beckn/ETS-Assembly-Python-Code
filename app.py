@@ -90,6 +90,7 @@ def connect_opcua():
             status4 = f'Error connecting to OPC UA Press server: {str(e)}'
             status = status1 + '<br>' +  status2 + '<br>' + status3 + '<br>' + status4
          # Pass both status and root_value to the template
+        #return jsonify({'status': status}) 
         return render_template('index.html', status=status)
 
 @app.route('/disconnect', methods=['POST'])
@@ -115,6 +116,7 @@ def disconnect_opcua():
             status3 = f'Error disconnecting from OPC UA Handling server: {str(e)}'
             status4 = f'Error disconnecting from OPC UA Press server: {str(e)}'
             status = status1 + '<br>' +  status2 + '<br>' + status3 + '<br>' + status4
+        #return jsonify({'status': status}) 
         return render_template('index.html', status=status)
 
 @app.route('/set_color', methods=['POST'])
@@ -162,10 +164,17 @@ def set_color_status():
 
 @app.route('/get_order_status', methods=['GET'])
 def get_order_status():
+    global assembly_process
+    assembly_process = False
     try:
         # Read the order status from the OPC UA server
         order_status = root_ControlStation.get_children()[0].get_children()[4].get_children()[8].get_value()
-        return jsonify({'order_status': order_status})
+        if (order_status == True) and (assembly_process == False):
+            return jsonify({'order_status': 'The order is possible'})
+        elif assembly_process == True:
+            return jsonify({'order_status': 'The assembly machine is busy'})
+        elif order_status == False:
+            return jsonify({'order_status': 'The order cannot be placed'})           
     except Exception as e:
         return jsonify({'error': str(e)}), 500  # Handle errors gracefully and return a 500 status code
 
@@ -179,9 +188,11 @@ def set_quantity():
                 status_quantity = 'Error: OPC UA client is not connected. Connect first.'
             else:
                 # Get the selected quantity from the form
+                print(request.form)
                 selected_quantity = int(request.form['quantity'])
                 status_quantity = f'Quantity set to {selected_quantity}'
         except Exception as e:
+            print(str(e))
             status_quantity = f'Error setting color: {str(e)}'
         return render_template('index.html', status_quantity=status_quantity)
  
@@ -220,6 +231,7 @@ def process_order():
             for quantity in range(1,selected_quantity+1):
                 order_status_check = root_ControlStation.get_children()[0].get_children()[4].get_children()[8].get_value()
                 if order_status_check:
+                    assembly_process = True
                     Pallet_Storage_1 = root_PalletStore.get_children()[0].get_children()[4].get_children()[5].get_value()
                     Pallet_Storage_2 = root_PalletStore.get_children()[0].get_children()[4].get_children()[6].get_value()
                     # Check if the Pallet storage has 10 pallets or 0 pallet
@@ -273,10 +285,12 @@ def process_order():
                         Assembly_Status = f"Box Number {quantity} is successfully assembled"
                         if(quantity == selected_quantity):
                             Assembly_Status = 'No order for processing'
+                            assembly_process = False
                             return jsonify({'message': f"The Order number {Order_Number} is successfully completed"})                   
                     else:
                         Assembly_Status = "Assembly process not completed successfully" 
                         Assembly_Status = 'No order for processing'
+                        assembly_process = False
                         return jsonify({'message': f"The Order number {Order_Number} cannot be completed due to some error"})  
                     # Giving delay to the next order to start    
                     time.sleep(5)                 
