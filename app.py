@@ -17,10 +17,11 @@ Leitstand     = "opc.tcp://192.168.97.101:4840"
 Palettenlager = "opc.tcp://192.168.97.102:4840"
 Handling      = "opc.tcp://192.168.97.103:4840"
 Presse_Press  = "opc.tcp://192.168.97.104:4840"
-
+assembly_process = False
 user = "MES"
 password = "training"
-
+# Create a lock
+order_lock = threading.Lock()
 root_ControlStation = None
 root_PalletStore    = None
 root_Handling       = None
@@ -165,16 +166,13 @@ def set_color_status():
 @app.route('/get_order_status', methods=['GET'])
 def get_order_status():
     global assembly_process
-    assembly_process = False
     try:
         # Read the order status from the OPC UA server
         order_status = root_ControlStation.get_children()[0].get_children()[4].get_children()[8].get_value()
         if (order_status == True) and (assembly_process == False):
             return jsonify({'order_status': 'The order is possible'})
-        elif assembly_process == True:
-            return jsonify({'order_status': 'The assembly machine is busy'})
-        elif order_status == False:
-            return jsonify({'order_status': 'The order cannot be placed'})           
+        else:
+            return jsonify({'order_status': 'The assembly machine is busy'})          
     except Exception as e:
         return jsonify({'error': str(e)}), 500  # Handle errors gracefully and return a 500 status code
 
@@ -215,89 +213,103 @@ def get_OrderNumber_status():
 
 @app.route('/process_order', methods=['POST'])
 def process_order():
+    global assembly_process
     global Assembly_Status
     global Order_Number
-    Order_Number = random.randint(1000,9999)
-    # Setting the order number 
-    dv_order = opcua.ua.DataValue(opcua.ua.Variant(Order_Number, opcua.ua.VariantType.Int16))
-    dv_order.ServerTimestamp = None
-    dv_order.SourceTimestamp = None
-    # Setting the order value
-    root_ControlStation.get_children()[0].get_children()[4].get_children()[0].set_value(dv_order)
-    Assembly_Status = f"Assembly process started for the Order Number:  {Order_Number}."
-    time.sleep(5)
+    global order_lock
     if request.method == 'POST':
-        try:      
-            for quantity in range(1,selected_quantity+1):
-                order_status_check = root_ControlStation.get_children()[0].get_children()[4].get_children()[8].get_value()
-                if order_status_check:
-                    assembly_process = True
-                    Pallet_Storage_1 = root_PalletStore.get_children()[0].get_children()[4].get_children()[5].get_value()
-                    Pallet_Storage_2 = root_PalletStore.get_children()[0].get_children()[4].get_children()[6].get_value()
-                    # Check if the Pallet storage has 10 pallets or 0 pallet
-                    if Pallet_Storage_1 == 10:
-                        return jsonify({'message':'Order cannot be placed. The Pallets in the pallet storage must be less than 10'})
-                    elif Pallet_Storage_1 == 0:
-                        return jsonify({'message':'Order cannot be placed. Add Pallets to the pallet storage'})
-                    elif Pallet_Storage_2 == 12:
-                        return jsonify({'message': 'Order cannot be placed. Empty the Pallets from pallet storage 2'}) 
-                    # Give the order if the status is true
-                    give_order_true = opcua.ua.DataValue(opcua.ua.Variant(True, opcua.ua.VariantType.Boolean))
-                    give_order_true.ServerTimestamp = None
-                    give_order_true.SourceTimestamp = None
-                    root_ControlStation.get_children()[0].get_children()[4].get_children()[6].set_value(give_order_true)                
-                    while root_PalletStore.get_children()[0].get_children()[4].get_children()[3].get_value() != 2:
-                        pass
-                    Assembly_Status = f"Process has started for Box Number {quantity}."
+        # Try to acquire the lock
+        if order_lock.acquire(blocking=False):  
+            try:      
+                for quantity in range(1,selected_quantity+1):
+                    order_status_check = root_ControlStation.get_children()[0].get_children()[4].get_children()[8].get_value()
+                    if order_status_check and assembly_process==False:
+                        assembly_process = True
+                        Pallet_Storage_1 = root_PalletStore.get_children()[0].get_children()[4].get_children()[5].get_value()
+                        Pallet_Storage_2 = root_PalletStore.get_children()[0].get_children()[4].get_children()[6].get_value()
+                        # Check if the Pallet storage has 10 pallets or 0 pallet
+                        if Pallet_Storage_1 == 10:
+                            assembly_process = False
+                            return jsonify({'message':'Order cannot be placed. The Pallets in the pallet storage must be less than 10'})
+                        elif Pallet_Storage_1 == 0:
+                            assembly_process = False
+                            return jsonify({'message':'Order cannot be placed. Add Pallets to the pallet storage'})
+                        elif Pallet_Storage_2 == 12:
+                            assembly_process = False
+                            return jsonify({'message': 'Order cannot be placed. Empty the Pallets from pallet storage 2'}) 
+                        # Setting the order number 
+                        Order_Number = random.randint(1000,9999)
+                        dv_order = opcua.ua.DataValue(opcua.ua.Variant(Order_Number, opcua.ua.VariantType.Int16))
+                        dv_order.ServerTimestamp = None
+                        dv_order.SourceTimestamp = None
+                        # Setting the order value
+                        root_ControlStation.get_children()[0].get_children()[4].get_children()[0].set_value(dv_order)
+                        Assembly_Status = f"Assembly process started for the Order Number:  {Order_Number}."
+                        time.sleep(5)
+                        # Give the order if the status is true
+                        give_order_true = opcua.ua.DataValue(opcua.ua.Variant(True, opcua.ua.VariantType.Boolean))
+                        give_order_true.ServerTimestamp = None
+                        give_order_true.SourceTimestamp = None
+                        root_ControlStation.get_children()[0].get_children()[4].get_children()[6].set_value(give_order_true)                
+                        while root_PalletStore.get_children()[0].get_children()[4].get_children()[3].get_value() != 2:
+                            pass
+                        Assembly_Status = f"Process has started for Box Number {quantity}."
 
-                    while root_ControlStation.get_children()[0].get_children()[4].get_children()[7].get_value() != True:
-                        pass
-                    give_order_false = opcua.ua.DataValue(opcua.ua.Variant(False, opcua.ua.VariantType.Boolean))
-                    give_order_false.ServerTimestamp = None
-                    give_order_false.SourceTimestamp = None
-                    root_ControlStation.get_children()[0].get_children()[4].get_children()[6].set_value(give_order_false) 
+                        while root_ControlStation.get_children()[0].get_children()[4].get_children()[7].get_value() != True:
+                            pass
+                        give_order_false = opcua.ua.DataValue(opcua.ua.Variant(False, opcua.ua.VariantType.Boolean))
+                        give_order_false.ServerTimestamp = None
+                        give_order_false.SourceTimestamp = None
+                        root_ControlStation.get_children()[0].get_children()[4].get_children()[6].set_value(give_order_false) 
 
-                    while root_PalletStore.get_children()[0].get_children()[4].get_children()[3].get_value() != 4:
-                        pass
-                    Assembly_Status = "Palet is successfully moved to the handling process"
+                        while root_PalletStore.get_children()[0].get_children()[4].get_children()[3].get_value() != 4:
+                            pass
+                        Assembly_Status = "Palet is successfully moved to the handling process"
 
-                    while  root_Handling.get_children()[0].get_children()[4].get_children()[3].get_value() == 0:
-                        pass
-                    Assembly_Status = "Handling process has started" 
+                        while  root_Handling.get_children()[0].get_children()[4].get_children()[3].get_value() == 0:
+                            pass
+                        Assembly_Status = "Handling process has started" 
 
-                    while  root_Handling.get_children()[0].get_children()[4].get_children()[3].get_value() != 0:
-                        pass
-                    Assembly_Status = "Handling process has successfully completed" 
+                        while  root_Handling.get_children()[0].get_children()[4].get_children()[3].get_value() != 0:
+                            pass
+                        Assembly_Status = "Handling process has successfully completed" 
                    
-                    while  root_Press.get_children()[0].get_children()[4].get_children()[3].get_value() == 0:
-                        pass
-                    Assembly_Status = "Lid pressing process has started" 
+                        while  root_Press.get_children()[0].get_children()[4].get_children()[3].get_value() == 0:
+                            pass
+                        Assembly_Status = "Lid pressing process has started" 
 
-                    while root_Press.get_children()[0].get_children()[4].get_children()[3].get_value() != 4:
-                        pass
-                    Assembly_Status = "Lid pressing process has successfully completed" 
+                        while root_Press.get_children()[0].get_children()[4].get_children()[3].get_value() != 4:
+                            pass
+                        Assembly_Status = "Lid pressing process has successfully completed" 
                             
-                    while root_PalletStore.get_children()[0].get_children()[4].get_children()[3].get_value() != 2:
-                        pass
-                    Assembly_Status = "The assembled box is successfully stored in the pallet storage" 
-                    time.sleep(5) # Waiting for the Palet storage to update its values
-                    if (root_PalletStore.get_children()[0].get_children()[4].get_children()[6].get_value() == (Pallet_Storage_2 + 1)) and (root_PalletStore.get_children()[0].get_children()[4].get_children()[5].get_value() == (Pallet_Storage_1 - 1)): 
-                        Assembly_Status = f"Box Number {quantity} is successfully assembled"
-                        if(quantity == selected_quantity):
+                        while root_PalletStore.get_children()[0].get_children()[4].get_children()[3].get_value() != 2:
+                            pass
+                        Assembly_Status = "The assembled box is successfully stored in the pallet storage" 
+                        time.sleep(5) # Waiting for the Palet storage to update its values
+                        if (root_PalletStore.get_children()[0].get_children()[4].get_children()[6].get_value() == (Pallet_Storage_2 + 1)) and (root_PalletStore.get_children()[0].get_children()[4].get_children()[5].get_value() == (Pallet_Storage_1 - 1)): 
+                            Assembly_Status = f"Box Number {quantity} is successfully assembled"
+                            if(quantity == selected_quantity):
+                                Assembly_Status = f"The Order number {Order_Number} is successfully completed"
+                                assembly_process = False
+                                return jsonify({'message': f"The Order number {Order_Number} is successfully completed"})                   
+                        else:
+                            Assembly_Status = "Assembly process not completed successfully" 
                             Assembly_Status = 'No order for processing'
                             assembly_process = False
-                            return jsonify({'message': f"The Order number {Order_Number} is successfully completed"})                   
+                            return jsonify({'message': f"The Order number {Order_Number} cannot be completed due to some error"})  
+                        # Giving delay to the next order to start    
+                        time.sleep(5)                 
                     else:
-                        Assembly_Status = "Assembly process not completed successfully" 
-                        Assembly_Status = 'No order for processing'
-                        assembly_process = False
-                        return jsonify({'message': f"The Order number {Order_Number} cannot be completed due to some error"})  
-                    # Giving delay to the next order to start    
-                    time.sleep(5)                 
-                else:
-                    return jsonify({'message': 'Order status is not true. Cannot give an order.'})
-        except Exception as e:
-            return jsonify({'error': str(e)}), 500  # Handle errors gracefully and return a 500 status code
+                        return jsonify({'message': 'Order status is not true. Cannot give an order.'})
+            except Exception as e:
+                return jsonify({'error': str(e)}), 500  # Handle errors gracefully and return a 500 status code   
+            finally:
+                # Release the lock after processing
+                order_lock.release()   
+        else:
+            return jsonify({'message': 'Order is already being processed'}), 403 
+    else:
+        return jsonify({'message': 'Invalid request method'}), 400 
 
 @app.route('/get_assembly_step', methods=['GET'])
 def get_assembly_step():
@@ -306,6 +318,7 @@ def get_assembly_step():
         return jsonify({'Assembly_Status': Assembly_Status})
     except Exception as e:
         return jsonify({'error': str(e)}), 500  # Handle errors gracefully and return a 500 status code
+
 
 if __name__ == '__main__':
     app.run(debug=True)
