@@ -84,15 +84,17 @@ def connect_opcua():
             root_Press = client_Press.get_root_node()
             status4= '4. Connected to OPC UA Press server successfully.'
             status = status1 + '<br>' +  status2 + '<br>' + status3 + '<br>' + status4
+            availablity_check = True
         except Exception as e:
             status1 = f'Error connecting to OPC UA Leitstand server: {str(e)}'
             status2 = f'Error connecting to OPC UA Palettenlager server: {str(e)}'
             status3 = f'Error connecting to OPC UA Handling server: {str(e)}'
             status4 = f'Error connecting to OPC UA Press server: {str(e)}'
             status = status1 + '<br>' +  status2 + '<br>' + status3 + '<br>' + status4
+            availablity_check = False
          # Pass both status and root_value to the template
-        #return jsonify({'status': status}) 
-        return render_template('index.html', status=status)
+        return jsonify({'status': status}, {'is assmebly machine available': availablity_check}) 
+        #return render_template('index.html', status=status)
 
 @app.route('/disconnect', methods=['POST'])
 def disconnect_opcua():
@@ -117,8 +119,8 @@ def disconnect_opcua():
             status3 = f'Error disconnecting from OPC UA Handling server: {str(e)}'
             status4 = f'Error disconnecting from OPC UA Press server: {str(e)}'
             status = status1 + '<br>' +  status2 + '<br>' + status3 + '<br>' + status4
-        #return jsonify({'status': status}) 
-        return render_template('index.html', status=status)
+        return jsonify({'status': status}) 
+        #return render_template('index.html', status=status)
 
 @app.route('/set_color', methods=['POST'])
 def set_color():
@@ -150,7 +152,8 @@ def set_color():
                     status_color = f'Error setting color. Updated color: {updated_color}'
         except Exception as e:
             status_color = f'Error setting color: {str(e)}'
-        return render_template('index.html', status_color=status_color)
+        #return render_template('index.html', status_color=status_color)
+        return jsonify({'color': status_color}) 
         
 @app.route('/set_color_status', methods=['GET'])
 def set_color_status():
@@ -192,7 +195,8 @@ def set_quantity():
         except Exception as e:
             print(str(e))
             status_quantity = f'Error setting color: {str(e)}'
-        return render_template('index.html', status_quantity=status_quantity)
+        #return render_template('index.html', status_quantity=status_quantity)
+        return jsonify({'quantity': status_quantity}) 
  
 
 @app.route('/set_quantity_status', methods=['GET'])
