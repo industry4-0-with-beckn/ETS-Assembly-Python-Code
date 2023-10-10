@@ -9,6 +9,7 @@ import configparser
 import pandas as pd
 import time
 import random
+import json
 
 app = Flask(__name__)
 
@@ -38,6 +39,26 @@ max_time_limit = 30
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/select', methods=['POST'])
+def select():
+
+    # Read the content of the 'response.select.json' file
+    with open('response.select.json', 'r') as json_file:
+        response_data = json.load(json_file)
+
+     # Call the connect_opcua function
+    response = connect_opcua()
+
+    # Update the 'status' field based on the condition
+    if response['availablity_check']:
+        response_data['message']['order']['status'] = 'Machine is available'
+    else:
+        response_data['message']['order']['status'] = 'Machine is not available'
+
+    # Return the response_data as a JSON response
+    return jsonify(response_data)
 
 @app.route('/connect', methods=['POST'])
 def connect_opcua():
