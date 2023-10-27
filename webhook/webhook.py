@@ -83,9 +83,7 @@ def bpp_handler():
         print('Request received')
         body = request.get_json()
         # Start the asynchronous task and immediately return the acknowledgment response
-        #asyncio.create_task(handler_asyn(body))
         asyncio.run(handler_asyn(body))
-        #await handler_asyn(body)
         return jsonify({
             'message': {
                 'ack': {
@@ -94,6 +92,8 @@ def bpp_handler():
             }
         })
     except Exception as err:
+        import traceback
+        traceback.print_exc()  # Print the traceback for debugging
         print(err)
         return jsonify({'error': 'Internal Server Error'}, 500)
 
@@ -102,4 +102,4 @@ def ping():
     return jsonify({'ok': True})
 
 if __name__ == '__main__':
-    app.run(debug=True,port=5001)
+    app.run(debug=False,port=5001)
