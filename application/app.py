@@ -10,6 +10,7 @@ import pandas as pd
 import time
 import random
 import json
+import os
 
 app = Flask(__name__)
 
@@ -34,30 +35,24 @@ start_time = time.time()
 # Define a maximum time limit (30 seconds)
 max_time_limit = 30
 
-
-
 @app.route('/')
 def index():
     return render_template('index.html')
 
-
 @app.route('/select', methods=['POST'])
 def select():
 
-    # Read the content of the 'response.select.json' file
-    with open('response.select.json', 'r') as json_file:
+    file_path = os.path.join(os.path.dirname(__file__), 'response', 'response.select.json')
+    with open(file_path, 'r') as json_file:
         response_data = json.load(json_file)
-
-     # Call the connect_opcua function
-    response = connect_opcua()
-
-    # Update the 'status' field based on the condition
-    if response['availablity_check']:
-        response_data['message']['order']['status'] = 'Machine is available'
-    else:
-        response_data['message']['order']['status'] = 'Machine is not available'
-
-    # Return the response_data as a JSON response
+    # #Call the connect_opcua function
+    # response = connect_opcua()
+    # # Update the 'status' field based on the condition
+    # if response['availablity_check']:
+    #     response_data['message']['order']['status'] = 'ACTIVE'
+    # else:
+    #     response_data['message']['order']['status'] = 'CANCEL'
+    # #Return the response_data as a JSON response
     return jsonify(response_data)
 
 @app.route('/connect', methods=['POST'])
@@ -81,40 +76,42 @@ def connect_opcua():
             client_ControlStation.set_user(user)
             client_ControlStation.set_password(password)
             client_ControlStation.connect()
-            root_ControlStation = client_ControlStation.get_root_node()
-            status1= '1. Connected to OPC UA Leitstand server successfully.'
+            #root_ControlStation = client_ControlStation.get_root_node()
+            #status1= '1. Connected to OPC UA Leitstand server successfully.'
 
             client_PalletStore = Client(Palettenlager)
             client_PalletStore.set_user(user)
             client_PalletStore.set_password(password)
             client_PalletStore.connect()
-            root_PalletStore = client_PalletStore.get_root_node()
-            status2= '2. Connected to OPC UA Palettenlager server successfully.'
+            #root_PalletStore = client_PalletStore.get_root_node()
+            #status2= '2. Connected to OPC UA Palettenlager server successfully.'
 
             client_Handling = Client(Handling)
             client_Handling.set_user(user)
             client_Handling.set_password(password)
             client_Handling.connect()
-            root_Handling = client_Handling.get_root_node()
-            status3= '3. Connected to OPC UA Handling server successfully.'
+            #root_Handling = client_Handling.get_root_node()
+            #status3= '3. Connected to OPC UA Handling server successfully.'
 
             client_Press = Client(Presse_Press)
             client_Press.set_user(user)
             client_Press.set_password(password)
             client_Press.connect()
-            root_Press = client_Press.get_root_node()
-            status4= '4. Connected to OPC UA Press server successfully.'
-            status = status1 + '<br>' +  status2 + '<br>' + status3 + '<br>' + status4
+            #root_Press = client_Press.get_root_node()
+            #status4= '4. Connected to OPC UA Press server successfully.'
+            #status = status1 + '<br>' +  status2 + '<br>' + status3 + '<br>' + status4
             availablity_check = True
         except Exception as e:
-            status1 = f'Error connecting to OPC UA Leitstand server: {str(e)}'
-            status2 = f'Error connecting to OPC UA Palettenlager server: {str(e)}'
-            status3 = f'Error connecting to OPC UA Handling server: {str(e)}'
-            status4 = f'Error connecting to OPC UA Press server: {str(e)}'
-            status = status1 + '<br>' +  status2 + '<br>' + status3 + '<br>' + status4
+            # status1 = f'Error connecting to OPC UA Leitstand server: {str(e)}'
+            # status2 = f'Error connecting to OPC UA Palettenlager server: {str(e)}'
+            # status3 = f'Error connecting to OPC UA Handling server: {str(e)}'
+            # status4 = f'Error connecting to OPC UA Press server: {str(e)}'
+            # status = status1 + '<br>' +  status2 + '<br>' + status3 + '<br>' + status4
             availablity_check = False
          # Pass both status and root_value to the template
-        return jsonify({'status': status}, {'is assmebly machine available': availablity_check}) 
+        response = {'availablity_check': availablity_check}
+        return response
+        #return jsonify({'status': status}, {'availablity_check': availablity_check}) 
         #return render_template('index.html', status=status)
 
 @app.route('/disconnect', methods=['POST'])

@@ -22,7 +22,6 @@
         "transaction_id": "a9aaecca-10b7-4d19-b640-022723112309",
         "message_id": "6114a3e5-acb0-4c99-b017-0ead5e894bad"
     },
-    "status": " ",
     "message": {
         "order": {
           "id" : "5",
