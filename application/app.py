@@ -39,20 +39,19 @@ max_time_limit = 30
 def index():
     return render_template('index.html')
 
+@app.route('/search', methods=['POST'])
+def search():
+    file_path = os.path.join(os.path.dirname(__file__), 'response', 'response.search.json')
+    with open(file_path, 'r') as json_file:
+        response_data = json.load(json_file)
+    return jsonify(response_data)
+
 @app.route('/select', methods=['POST'])
 def select():
 
     file_path = os.path.join(os.path.dirname(__file__), 'response', 'response.select.json')
     with open(file_path, 'r') as json_file:
         response_data = json.load(json_file)
-    # #Call the connect_opcua function
-    # response = connect_opcua()
-    # # Update the 'status' field based on the condition
-    # if response['availablity_check']:
-    #     response_data['message']['order']['status'] = 'ACTIVE'
-    # else:
-    #     response_data['message']['order']['status'] = 'CANCEL'
-    # #Return the response_data as a JSON response
     return jsonify(response_data)
 
 @app.route('/connect', methods=['POST'])
