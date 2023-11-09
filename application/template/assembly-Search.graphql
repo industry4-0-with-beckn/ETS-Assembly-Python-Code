@@ -20,6 +20,8 @@ query{
               address
               state
               country
+              city
+              zip
             }
           }
         }
