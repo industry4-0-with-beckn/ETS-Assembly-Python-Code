@@ -4,22 +4,53 @@ import os
 import json
 import asyncio
 from dotenv import load_dotenv
+from math import radians, sin, cos, sqrt, atan2
 connect_url = 'http://localhost:5000/connect' 
 # Load environment variables from .env file
 load_dotenv()
 app = Flask(__name__)
 
+# Target location to the east of the user
+target_lat = 30.876877
+target_lon = 73.868969 + 0.035  # Adjusted longitude to be approximately 2.5 miles east
+
+
+def haversine(lat1, lon1, lat2, lon2):
+    # Radius of the Earth in miles
+    R = 3959.0
+
+    # Convert latitude and longitude from degrees to radians
+    lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
+
+    # Calculate the change in coordinates
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+
+    # Haversine formula
+    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+    # Calculate the distance
+    distance = R * c
+
+    return distance
+
 async def handler_asyn(body):
     try:
         ets_url = ''
-        # Check if the 'actions' key exists in the JSON data
+        #gps_coordinates = body['message']['intent']['provider']['locations'][0]['circle']['gps']  
+        #radius_val = body['message']['intent']['provider']['locations'][0]['circle']['gps']['radius']['value'] 
+        #user_lat, user_lon = map(float, gps_coordinates.split(','))
+        #location_range_value = float(body['message']['intent']['provider']['locations'][0]['circle']['radius']['value']) # the value would be in miles
+        #distance_cal =  haversine(user_lat, user_lon, target_lat, target_lon)
+        #if body['context']['domain'] == "supply-chain-services:assembly": 
+            # Check if the 'actions' key exists in the JSON data
         ets_url = f"{os.environ.get('ETSURL')}/{body['context']['action']}"
-        print('called', ets_url)
+        print('Assembly URL Called', ets_url)
         response = requests.post(ets_url, json=body)
-        #response = await asyncio.to_thread(requests.post, ets_url, json=body)
 
         if not response.json().get('context'):
-            print('Invalid response from ets assembly bpp api')
+            print('No response from search request')
             return
         
         response_data = response.json()
@@ -27,15 +58,8 @@ async def handler_asyn(body):
         response_data['context']['bap_id'] = body['context']['bap_id']
         response_data['context']['bap_uri'] = body['context']['bap_uri']
         response_data['context']['transaction_id'] = body['context']['transaction_id']
-        response_data['context']['domain'] = body['context']['domain']
 
         await asyncio.sleep(2)
-
-        if body['context'].get('bpp_id'):
-            response_data['context']['bpp_id'] = body['context']['bpp_id']
-
-        if body['context'].get('bpp_uri'):
-            response_data['context']['bpp_uri'] = body['context']['bpp_uri']
 
         request_action = None
         request_action_map = {
@@ -59,7 +83,7 @@ async def handler_asyn(body):
             print(f'Invalid request action -> {request_action}')
             return
 
-        bpp_client_url = f"{os.environ.get('BPPCLIENTURL')}/{request_action}"
+        bpp_client_url = f"{os.environ.get('BPPCLIENTURL')}/{request_action}" 
 
         def send_post_request():
             print('\n\n', '-----------------------------------------------------------', '\n',
@@ -96,6 +120,8 @@ def bpp_handler():
         traceback.print_exc()  # Print the traceback for debugging
         print(err)
         return jsonify({'error': 'Internal Server Error'}, 500)
+
+
 
 @app.route('/ping', methods=['GET'])
 def ping():

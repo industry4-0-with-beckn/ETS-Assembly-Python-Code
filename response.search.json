@@ -103,53 +103,6 @@
                   "c3"
                 ],
                 "fulfillment_ids": ["f1"],
-                "tags": [
-                    {
-                        "descriptor": {
-                            "code": "product-info",
-                            "name": "Product Information"
-                        },
-                        "list": [
-                            {
-                                "descriptor": {
-                                    "name": "product-type"
-                                },
-                                "value": "Box Assembly"
-                            }
-                        ],
-                        "display": true
-                    },
-                    {
-                        "descriptor": {
-                            "code": "assembly-info",
-                            "name": "Assembly Information"
-                        },
-                        "list": [
-                            {
-                                "descriptor": {
-                                    "name": "assembly-method"
-                                },
-                                "value": "automated"
-                            }
-                        ],
-                        "display": true
-                    },
-                    {
-                        "descriptor": {
-                            "code": "scale-info",
-                            "name": "Scale Information"
-                        },
-                        "list": [
-                            {
-                                "descriptor": {
-                                    "name": "scale-type"
-                                },
-                                "value": "industrial"
-                            }
-                        ],
-                        "display": true
-                    }
-                ],
                 "price": {
                   "currency": "EUR",
                   "value": "starting from 100 EUR"
