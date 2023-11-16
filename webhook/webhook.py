@@ -10,41 +10,9 @@ connect_url = 'http://localhost:5000/connect'
 load_dotenv()
 app = Flask(__name__)
 
-# Target location to the east of the user
-target_lat = 30.876877
-target_lon = 73.868969 + 0.035  # Adjusted longitude to be approximately 2.5 miles east
-
-
-def haversine(lat1, lon1, lat2, lon2):
-    # Radius of the Earth in miles
-    R = 3959.0
-
-    # Convert latitude and longitude from degrees to radians
-    lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
-
-    # Calculate the change in coordinates
-    dlat = lat2 - lat1
-    dlon = lon2 - lon1
-
-    # Haversine formula
-    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
-    c = 2 * atan2(sqrt(a), sqrt(1 - a))
-
-    # Calculate the distance
-    distance = R * c
-
-    return distance
-
 async def handler_asyn(body):
     try:
         ets_url = ''
-        #gps_coordinates = body['message']['intent']['provider']['locations'][0]['circle']['gps']  
-        #radius_val = body['message']['intent']['provider']['locations'][0]['circle']['gps']['radius']['value'] 
-        #user_lat, user_lon = map(float, gps_coordinates.split(','))
-        #location_range_value = float(body['message']['intent']['provider']['locations'][0]['circle']['radius']['value']) # the value would be in miles
-        #distance_cal =  haversine(user_lat, user_lon, target_lat, target_lon)
-        #if body['context']['domain'] == "supply-chain-services:assembly": 
-            # Check if the 'actions' key exists in the JSON data
         ets_url = f"{os.environ.get('ETSURL')}/{body['context']['action']}"
         print('Assembly URL Called', ets_url)
         response = requests.post(ets_url, json=body)
@@ -106,6 +74,7 @@ def bpp_handler():
     try:
         print('Request received')
         body = request.get_json()
+        #print('Request body is: ', body)
         # Start the asynchronous task and immediately return the acknowledgment response
         asyncio.run(handler_asyn(body))
         return jsonify({
