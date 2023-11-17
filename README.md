@@ -1,6 +1,6 @@
 # ETS-Assembly-Python-Code
 
-# Assembly Keywords and Locations
+# Assembly Keywords and Location Filtering
 
 ## Assembly Keywords
 
