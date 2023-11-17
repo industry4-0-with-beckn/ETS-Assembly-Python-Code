@@ -86,7 +86,7 @@ def search():
     radius_val_user = request_data['message']['intent']['provider']['locations'][0]['circle']['radius']['value']
     gps_coordinates_user = request_data['message']['intent']['provider']['locations'][0]['circle']['gps']   
     user_lat, user_lon = map(float, gps_coordinates_user.split(','))
-    user_input = request_data['message']['intent']['category']['descriptor']['code'] # comparing the user_input with assembly_keywords
+    user_input = str(request_data['message']['intent']['category']['descriptor']['code']) # comparing the user_input with assembly_keywords
     user_rating_filter = request_data['message']['intent']['provider']['rating'] # the result would be like gt, gte, lt and lte, for example gte>4
     file_path = os.path.join(os.path.dirname(__file__), 'response', 'response.search.ets.json')
     with open(file_path, 'r') as json_file:
@@ -184,30 +184,32 @@ def search():
         # Append the provider to the list
         providers_list.append(provider_obj)
 
+    # Check if the user provided a radius filter
+    if radius_val_user != '0.0':
+        radius_filter_enabled = True
+    else:
+        radius_filter_enabled = False 
+
+    if user_rating_filter != 'lte<5':
+        rating_filter_enabled = True
+    else:
+        rating_filter_enabled = False 
+
     # Initialize selected_provider to a default value
-    selected_provider = 'all'
+    selected_provider = 'default'
 
     # Check if user_input is in the assembly_keywords dictionary
-    if user_input in assembly_keywords:
+    if user_input.lower().strip() in assembly_keywords:
         selected_provider = assembly_keywords[user_input]
 
     if selected_provider == 'all':
          # Include all providers in providers_list
-        filtered_providers = []
-        for provider in providers_list:
-            provider_location = provider['location'][0]['gps']
-            provider_lat, provider_lon = map(float, provider_location.split(','))
-            distance_from_user = haversine(user_lat, user_lon, provider_lat, provider_lon)
-
-            # Check if the user provided a radius filter
-            if radius_val_user != '0.0':
-                radius_filter_enabled = True
-            else:
-                radius_filter_enabled = False 
-            
-            # Check if the user provided a rating filter
-            if user_rating_filter != 'lte<5':
-                rating_filter_enabled = True
+        if (radius_filter_enabled == True) or (rating_filter_enabled ==True):
+            filtered_providers = []
+            for provider in providers_list:
+                provider_location = provider['location'][0]['gps']
+                provider_lat, provider_lon = map(float, provider_location.split(','))
+                distance_from_user = haversine(user_lat, user_lon, provider_lat, provider_lon) 
                 provider_rating = float(provider['rating'])
                 if 'gte>' in user_rating_filter:
                     user_rating_operator = 'gte'
@@ -220,23 +222,22 @@ def search():
                     user_rating_value = float(user_rating_filter.replace('lte<', ''))
                 elif 'lt<' in user_rating_filter:
                     user_rating_operator = 'lt'
-                    user_rating_value = float(user_rating_filter.replace('lt<', ''))
+                    user_rating_value = float(user_rating_filter.replace('lt<', ''))          
 
-            else:
-                rating_filter_enabled = False
+                if (radius_filter_enabled and distance_from_user > float(radius_val_user)) or (rating_filter_enabled and not (
+                                                                            (user_rating_operator == 'gt' and provider_rating > user_rating_value) or
+                                                                            (user_rating_operator == 'gte' and provider_rating >= user_rating_value) or
+                                                                            (user_rating_operator == 'lt' and provider_rating < user_rating_value) or
+                                                                            (user_rating_operator == 'lte' and provider_rating <= user_rating_value)
+                    )) :
+                        continue  # Skip to the next provider if the distance filter is not satisfied
 
-            if (radius_filter_enabled and distance_from_user > float(radius_val_user)) or (rating_filter_enabled and not (
-                                                                        (user_rating_operator == 'gt' and provider_rating > user_rating_value) or
-                                                                        (user_rating_operator == 'gte' and provider_rating >= user_rating_value) or
-                                                                        (user_rating_operator == 'lt' and provider_rating < user_rating_value) or
-                                                                        (user_rating_operator == 'lte' and provider_rating <= user_rating_value)
-                )) :
-                    continue  # Skip to the next provider if the distance filter is not satisfied
+                # If the provider satisfies both distance and rating filters, add it to the list
+                filtered_providers.append(provider)
 
-            # If the provider satisfies both distance and rating filters, add it to the list
-            filtered_providers.append(provider)
-
-        providers_list = filtered_providers
+            providers_list = filtered_providers
+        else:
+            pass
     else:
         providers_list = [provider for provider in providers_list if provider['descriptor']['name'] == selected_provider]
     # Update template_data with the providers list
