@@ -40,9 +40,9 @@ assembly_keywords = {
     'supply chain assembly': 'Reiner-Assembly'
 }
 
-**## Location and Filtering**
+## Location and Filtering
 
-**###Default User Coordinates**
+## Default User Coordinates
 Latitude: 50.313409, Longitude: 11.912811
 
 Assembly Locations
