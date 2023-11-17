@@ -2,7 +2,6 @@
 
 # Assembly Keywords and Location Filtering
 
-## Assembly Keywords
 
 Here are the hard-coded scenarios and their corresponding assembly keywords:
 
