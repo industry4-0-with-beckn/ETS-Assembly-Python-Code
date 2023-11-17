@@ -40,7 +40,7 @@ assembly_keywords = {
 }
 
 ## Location and Filtering
-
+Requet format without filtering: rating: 'lte<5' || radius: '0.0'
 ## Default User Coordinates
 Latitude: 50.313409, Longitude: 11.912811
 
