@@ -26,6 +26,7 @@ headers = {
 assembly_keywords = {
     'assembly': 'all',
     'assembly service': 'all',
+    'assembly services': 'all',
     'ets': 'ETS-Assembly',
     'ets assembly': 'ETS-Assembly',
     'steel': 'ETS-Assembly',
@@ -87,6 +88,7 @@ def search():
     gps_coordinates_user = request_data['message']['intent']['provider']['locations'][0]['circle']['gps']   
     user_lat, user_lon = map(float, gps_coordinates_user.split(','))
     user_input = str(request_data['message']['intent']['category']['descriptor']['code']) # comparing the user_input with assembly_keywords
+    user_input = user_input.lower().strip()
     user_rating_filter = request_data['message']['intent']['provider']['rating'] # the result would be like gt, gte, lt and lte, for example gte>4
     file_path = os.path.join(os.path.dirname(__file__), 'response', 'response.search.ets.json')
     with open(file_path, 'r') as json_file:
@@ -112,6 +114,7 @@ def search():
     for provider_data in response_data["data"]["providers"]["data"]:
         # Extract provider attributes
         provider_attributes = provider_data["attributes"]
+        provider_data_id         = provider_data["id"]
         # Extract category data
         category_ids = provider_attributes["category_ids"]["data"]
         categories_list = [
@@ -167,7 +170,7 @@ def search():
        
         # Construct the provider object
         provider_obj = {
-            "id": logo_id,
+            "id": provider_data_id,
             "rating": rating,
             "location":location,
             "descriptor": {
@@ -199,7 +202,7 @@ def search():
     selected_provider = 'default'
 
     # Check if user_input is in the assembly_keywords dictionary
-    if user_input.lower().strip() in assembly_keywords:
+    if user_input in assembly_keywords:
         selected_provider = assembly_keywords[user_input]
 
     if selected_provider == 'all':
