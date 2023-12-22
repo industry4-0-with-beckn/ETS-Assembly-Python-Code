@@ -1,0 +1,533 @@
+{
+    "data": {
+      "providers": {
+        "data": [
+          {
+            "id": "1",
+            "attributes": {
+              "domain_id": {
+                "data": {
+                  "attributes": {
+                    "DomainName": "supply-chain-services:assembly"
+                  }
+                }
+              },
+              "provider_name": "ETS-Assembly",
+              "short_desc": "Assembly",
+              "long_desc": "The Steel Container Assembly Machine is a precision-engineered system designed for efficiently assembling. ",
+              "provider_id": "industry-bpp",
+              "provider_uri": "https://18aa-194-95-60-104.ngrok-free.app",
+              "location_id": {
+                "data": {
+                  "attributes": {
+                    "address": "EtsStraße 2",
+                    "state": "Berlin",
+                    "country": "Germany",
+                    "city": "HOF",
+                    "zip": 95028,
+                    "latitude": 50.311674,
+                    "longitude": 11.903358
+                  }
+                }
+              },
+              "logo": {
+                "data": {
+                  "id": "16",
+                  "attributes": {
+                    "url": "https://images.pexels.com/photos/5532668/pexels-photo-5532668.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                  }
+                }
+              },
+              "category_ids": {
+                "data": [
+                  {
+                    "id": "1",
+                    "attributes": {
+                      "category_code": "AS-1",
+                      "value": "Assembly"
+                    }
+                  },
+                  {
+                    "id": "2",
+                    "attributes": {
+                      "category_code": "AS-2",
+                      "value": "Automated-Assembly"
+                    }
+                  },
+                  {
+                    "id": "3",
+                    "attributes": {
+                      "category_code": "AS-3",
+                      "value": "Box-with-lid-Assembly"
+                    }
+                  },
+                  {
+                    "id": "4",
+                    "attributes": {
+                      "category_code": "AS-4",
+                      "value": "press-fit-assembly"
+                    }
+                  }
+                ]
+              },
+              "items": {
+                "data": [
+                  {
+                    "id": "1",
+                    "attributes": {
+                      "image": {
+                        "data": [
+                          {
+                            "attributes": {
+                              "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJQbANiJKOddLqjBqk3Y-bws-pUxisbxvhrw&usqp=CAU"
+                            }
+                          }
+                        ]
+                      },
+                      "name": "Press-Fit-Assembly-Type"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "2",
+            "attributes": {
+              "domain_id": {
+                "data": {
+                  "attributes": {
+                    "DomainName": "supply-chain-services:assembly"
+                  }
+                }
+              },
+              "provider_name": "Outbox-Assembly",
+              "short_desc": "Assembly",
+              "long_desc": "The  Cardboard Box Assembly Service offers a seamless solution for the efficient assembly of high-quality cardboard boxes. ",
+              "provider_id": "industry4-bpp",
+              "provider_uri": "https://18aa-194-95-60-104.ngrok-free.app",
+              "location_id": {
+                "data": {
+                  "attributes": {
+                    "address": "OutboxStraße 79",
+                    "state": "Frankfurt",
+                    "country": "Germany",
+                    "city": "Frankfurt",
+                    "zip": 60599,
+                    "latitude": 50.10074071920037,
+                    "longitude": 8.695920005190475
+                  }
+                }
+              },
+              "logo": {
+                "data": {
+                  "id": "20",
+                  "attributes": {
+                    "url": "https://thumbs.dreamstime.com/z/industrial-equipment-packaging-boxes-machinery-line-assembly-conveyor-process-box-carton-distribution-84937725.jpg"
+                  }
+                }
+              },
+              "category_ids": {
+                "data": [
+                  {
+                    "id": "1",
+                    "attributes": {
+                      "category_code": "AS-1",
+                      "value": "Assembly"
+                    }
+                  },
+                  {
+                    "id": "2",
+                    "attributes": {
+                      "category_code": "AS-2",
+                      "value": "Automated-Assembly"
+                    }
+                  },
+                  {
+                    "id": "5",
+                    "attributes": {
+                      "category_code": "AS-5",
+                      "value": "Cardboard box assembly"
+                    }
+                  }
+                ]
+              },
+              "items": {
+                "data": [
+                  {
+                    "id": "2",
+                    "attributes": {
+                      "image": {
+                        "data": [
+                          {
+                            "attributes": {
+                              "url": "https://capsa2in1.com/wp-content/uploads/2020/08/cajas-envios-ecommerce-PRINCIPAL-ez-plus.png"
+                            }
+                          }
+                        ]
+                      },
+                      "name": "Carboard type assembly"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "3",
+            "attributes": {
+              "domain_id": {
+                "data": {
+                  "attributes": {
+                    "DomainName": "supply-chain-services:assembly"
+                  }
+                }
+              },
+              "provider_name": "ABS-Assembly",
+              "short_desc": "Assembly",
+              "long_desc": "Automotive assembly service",
+              "provider_id": "industry4-bpp",
+              "provider_uri": "https://18aa-194-95-60-104.ngrok-free.app",
+              "location_id": {
+                "data": {
+                  "attributes": {
+                    "address": "AbsStraße 43",
+                    "state": null,
+                    "country": "Germany",
+                    "city": "Gattendorf",
+                    "zip": 95185,
+                    "latitude": 50.320078204305375,
+                    "longitude": 11.986483311054558
+                  }
+                }
+              },
+              "logo": {
+                "data": {
+                  "id": "19",
+                  "attributes": {
+                    "url": "https://c8.alamy.com/comp/2G78JBR/modern-car-production-line-with-robotic-arms-welding-components-3d-render-2G78JBR.jpg"
+                  }
+                }
+              },
+              "category_ids": {
+                "data": [
+                  {
+                    "id": "6",
+                    "attributes": {
+                      "category_code": "AS-6",
+                      "value": "Automotive Assmebly"
+                    }
+                  }
+                ]
+              },
+              "items": {
+                "data": [
+                  {
+                    "id": "3",
+                    "attributes": {
+                      "image": {
+                        "data": [
+                          {
+                            "attributes": {
+                              "url": "https://www.familyhandyman.com/wp-content/uploads/2020/11/brakes-GettyImages-184331873.jpg"
+                            }
+                          }
+                        ]
+                      },
+                      "name": "Brake-System Assembly"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "4",
+            "attributes": {
+              "domain_id": {
+                "data": {
+                  "attributes": {
+                    "DomainName": "supply-chain-services:assembly"
+                  }
+                }
+              },
+              "provider_name": "Wirth-Werkzeugbau",
+              "short_desc": "Automotive parts",
+              "long_desc": "Seit 1989 Ihr Partner für innovative Lösungen in Werkzeugbau und Kunststofftechnik",
+              "provider_id": "industry4-bpp",
+              "provider_uri": "https://18aa-194-95-60-104.ngrok-free.app",
+              "location_id": {
+                "data": {
+                  "attributes": {
+                    "address": "WirthStraße 1",
+                    "state": "Bavaria",
+                    "country": "Germany",
+                    "city": "Dohlau",
+                    "zip": 95028,
+                    "latitude": 50.281718228619184,
+                    "longitude": 11.942483786225266
+                  }
+                }
+              },
+              "logo": {
+                "data": {
+                  "id": "18",
+                  "attributes": {
+                    "url": "https://www.ww-werkzeugbau.de/wp-content/uploads/sites/3/2020/11/WWS-Spritzguss_Automotive.jpg"
+                  }
+                }
+              },
+              "category_ids": {
+                "data": [
+                  {
+                    "id": "7",
+                    "attributes": {
+                      "category_code": "AS-6",
+                      "value": "Car-Engine-Assembly"
+                    }
+                  }
+                ]
+              },
+              "items": {
+                "data": [
+                  {
+                    "id": "4",
+                    "attributes": {
+                      "image": {
+                        "data": [
+                          {
+                            "attributes": {
+                              "url": "https://c8.alamy.com/comp/W9CP75/chinese-factory-workers-assemble-a-byd-car-on-the-production-line-at-the-auto-plant-and-headquarters-of-byd-company-limited-and-shenzhen-byd-auto-co-W9CP75.jpg"
+                            }
+                          }
+                        ]
+                      },
+                      "name": "Car-Engine_Assembly"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "5",
+            "attributes": {
+              "domain_id": {
+                "data": {
+                  "attributes": {
+                    "DomainName": "supply-chain-services:assembly"
+                  }
+                }
+              },
+              "provider_name": "PCBA-Assembly",
+              "short_desc": "Assembly",
+              "long_desc": "Printed Circuit Board Assemblies",
+              "provider_id": "industry4-bpp",
+              "provider_uri": "https://18aa-194-95-60-104.ngrok-free.app",
+              "location_id": {
+                "data": {
+                  "attributes": {
+                    "address": "PcbaStraße 1234",
+                    "state": null,
+                    "country": "Germany",
+                    "city": "Köditz",
+                    "zip": 95189,
+                    "latitude": 50.33172816551412,
+                    "longitude": 11.84679509483352
+                  }
+                }
+              },
+              "logo": {
+                "data": {
+                  "id": "11",
+                  "attributes": {
+                    "url": "https://i.ytimg.com/vi/Ugixh3Ngr5E/sddefault.jpg"
+                  }
+                }
+              },
+              "category_ids": {
+                "data": [
+                  {
+                    "id": "8",
+                    "attributes": {
+                      "category_code": "AS-7",
+                      "value": "Printed Circuit Board"
+                    }
+                  },
+                  {
+                    "id": "2",
+                    "attributes": {
+                      "category_code": "AS-2",
+                      "value": "Automated-Assembly"
+                    }
+                  }
+                ]
+              },
+              "items": {
+                "data": [
+                  {
+                    "id": "5",
+                    "attributes": {
+                      "image": {
+                        "data": [
+                          {
+                            "attributes": {
+                              "url": "https://i.ytimg.com/vi/Ugixh3Ngr5E/sddefault.jpg"
+                            }
+                          }
+                        ]
+                      },
+                      "name": "Circuit Board Assembly"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "6",
+            "attributes": {
+              "domain_id": {
+                "data": {
+                  "attributes": {
+                    "DomainName": "supply-chain-services:assembly"
+                  }
+                }
+              },
+              "provider_name": "Zapf-umzüge",
+              "short_desc": "Assembly",
+              "long_desc": "Furniture Assembly service: Expert assistance for hassle-free \"do-it-yourself\" furniture reassembly, ensuring precision and saving you time and effort",
+              "provider_id": "industry4-bpp",
+              "provider_uri": "https://18aa-194-95-60-104.ngrok-free.app",
+              "location_id": {
+                "data": {
+                  "attributes": {
+                    "address": "Zapftraße 789",
+                    "state": null,
+                    "country": "Germany",
+                    "city": "Selbitz",
+                    "zip": 95152,
+                    "latitude": 50.31598660272283,
+                    "longitude": 11.74808522726301
+                  }
+                }
+              },
+              "logo": {
+                "data": {
+                  "id": "12",
+                  "attributes": {
+                    "url": "https://d2nk66epwbpimf.cloudfront.net/images/bd393404-5cf5-49d4-9b16-a5a4d29eafec/ae246e42-540d-4974-9c53-186298cbc5bd.png"
+                  }
+                }
+              },
+              "category_ids": {
+                "data": [
+                  {
+                    "id": "9",
+                    "attributes": {
+                      "category_code": "AS-8",
+                      "value": "Furniture-assembly"
+                    }
+                  },
+                  {
+                    "id": "10",
+                    "attributes": {
+                      "category_code": "AS-9",
+                      "value": "Kitchen Assembly"
+                    }
+                  }
+                ]
+              },
+              "items": {
+                "data": [
+                  {
+                    "id": "6",
+                    "attributes": {
+                      "image": {
+                        "data": [
+                          {
+                            "attributes": {
+                              "url": "https://d2nk66epwbpimf.cloudfront.net/images/bd393404-5cf5-49d4-9b16-a5a4d29eafec/ae246e42-540d-4974-9c53-186298cbc5bd.png"
+                            }
+                          }
+                        ]
+                      },
+                      "name": "Furniture-Assembly"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "7",
+            "attributes": {
+              "domain_id": {
+                "data": {
+                  "attributes": {
+                    "DomainName": "supply-chain-services:assembly"
+                  }
+                }
+              },
+              "provider_name": "Reiner-Assembly",
+              "short_desc": "Assembly",
+              "long_desc": "Precision assembly services for streamlined value chains in industrial manufacturing.",
+              "provider_id": "sampat-bpp",
+              "provider_uri": "https://sampatbppnetwork.loca.lt",
+              "location_id": {
+                "data": {
+                  "attributes": {
+                    "address": "ReinerStraße 24",
+                    "state": null,
+                    "country": "Germany",
+                    "city": "Naila",
+                    "zip": 95119,
+                    "latitude": 50.3293665745807,
+                    "longitude": 11.702150837326103
+                  }
+                }
+              },
+              "logo": {
+                "data": {
+                  "id": "13",
+                  "attributes": {
+                    "url": "https://www.reiner.de/data/media/137/logo_reiner_quadrat.jpg-19303.jpg"
+                  }
+                }
+              },
+              "category_ids": {
+                "data": [
+                  {
+                    "id": "11",
+                    "attributes": {
+                      "category_code": "AS-10",
+                      "value": "Precision Parts"
+                    }
+                  }
+                ]
+              },
+              "items": {
+                "data": [
+                  {
+                    "id": "7",
+                    "attributes": {
+                      "image": {
+                        "data": [
+                          {
+                            "attributes": {
+                              "url": "https://www.reiner.de/data/media/137/logo_reiner_quadrat.jpg-19303.jpg"
+                            }
+                          }
+                        ]
+                      },
+                      "name": "Precision-Assembly_Type"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  }

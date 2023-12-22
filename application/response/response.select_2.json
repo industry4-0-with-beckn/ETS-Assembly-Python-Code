@@ -1,0 +1,189 @@
+{
+    "context": {
+        "ttl": "PT10M",
+        "action": "select",
+        "timestamp": "2023-12-17T08:28:29.501Z",
+        "message_id": "47fa9ce9-4963-4582-8735-43b05e3e8a97",
+        "transaction_id": "a9aaecca-10b7-4d19-b640-b047a7c62196",
+        "domain": "supply-chain-services:assembly",
+        "version": "1.1.0",
+        "bap_id": "ps-bap-network.becknprotocol.io",
+        "bap_uri": "https://ps-bap-network.becknprotocol.io/",
+        "location": {
+            "country": {
+                "code": "DE"
+            }
+        },
+        "bpp_id": "beckn-sandbox-bpp.becknprotocol.io",
+        "bpp_uri": "https://sandbox-bpp-network.becknprotocol.io/"
+    },
+    "responses": [
+        {
+            "context": {
+                "domain": "supply-chain-services:assembly",
+                "action": "on_select",
+                "version": "1.1.0",
+                "bpp_id": "beckn-sandbox-bpp.becknprotocol.io",
+                "bpp_uri": "https://sandbox-bpp-network.becknprotocol.io/",
+                "country": "IND",
+                "city": "std:080",
+                "location": {
+                    "country": {
+                        "code": "DE"
+                    }
+                },
+                "bap_id": "ps-bap-network.becknprotocol.io",
+                "bap_uri": "https://ps-bap-network.becknprotocol.io/",
+                "transaction_id": "a9aaecca-10b7-4d19-b640-b047a7c62196",
+                "message_id": "47fa9ce9-4963-4582-8735-43b05e3e8a97",
+                "ttl": "PT10M",
+                "timestamp": "2023-12-17T08:28:36.222Z"
+            },
+            "message": {
+                "order": {
+                    "provider": {
+                        "id": "1",
+                        "descriptor": {
+                            "images": [
+                                {
+                                    "url": "https://images.pexels.com/photos/5532668/pexels-photo-5532668.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                                    "size_type": "sm"
+                                }
+                            ],
+                            "name": "Makerspace",
+                            "short_desc": "Makerspace",
+                            "long_desc": "Makerspace, Hof."
+                        }
+                    },
+                    "items": [
+                        {
+                            "id": "66b7b9bad166-4a3f-ada6-ca063dc9d321",
+                            "descriptor": {
+                                "images": [
+                                    {
+                                        "url": "https://makerspace/assembly/intermittent.img",
+                                        "size_type": "sm"
+                                    }
+                                ],
+                                "name": "Intermittent assembly type"
+                            },
+                            "category_ids": [
+                                "p2c3"
+                            ],
+                            "tags": [
+                                {
+                                    "descriptor": {
+                                        "code": "product-info",
+                                        "name": "Product Information"
+                                    },
+                                    "list": [
+                                        {
+                                            "descriptor": {
+                                                "name": "product-type"
+                                            },
+                                            "value": "electronics"
+                                        }
+                                    ],
+                                    "display": true
+                                },
+                                {
+                                    "descriptor": {
+                                        "code": "assembly-info",
+                                        "name": "Assembly Information"
+                                    },
+                                    "list": [
+                                        {
+                                            "descriptor": {
+                                                "name": "assembly-method"
+                                            },
+                                            "value": "automated"
+                                        }
+                                    ],
+                                    "display": true
+                                },
+                                {
+                                    "descriptor": {
+                                        "code": "scale-info",
+                                        "name": "Scale Information"
+                                    },
+                                    "list": [
+                                        {
+                                            "descriptor": {
+                                                "name": "scale-type"
+                                            },
+                                            "value": "industrial"
+                                        }
+                                    ],
+                                    "display": true
+                                },
+                                {
+                                    "descriptor": {
+                                        "code": "printer-info",
+                                        "name": "Printer Information"
+                                    },
+                                    "list": [
+                                        {
+                                            "descriptor": {
+                                                "name": "Resolution"
+                                            },
+                                            "value": "gte>20%"
+                                        },
+                                        {
+                                            "descriptor": {
+                                                "name": "success-rate"
+                                            },
+                                            "value": "gte>95%"
+                                        }
+                                    ],
+                                    "display": true
+                                }
+                            ],
+                            "price": {
+                                "currency": "EUR",
+                                "value": "starting from 50 EUR"
+                            }
+                        }
+                    ],
+                    "fulfillments": [
+                        {
+                            "id": "f1",
+                            "stops": [
+                                {
+                                    "type": "end",
+                                    "location": {
+                                        "gps": "1.3806217468119772, 103.74636438437074",
+                                        "area_code": "680230"
+                                    }
+                                }
+                            ],
+                            "tracking": false
+                        }
+                    ],
+                    "quote": {
+                        "breakup": [
+                            {
+                                "price": {
+                                    "currency": "EUR",
+                                    "value": "200"
+                                },
+                                "title": "Base Price"
+                            },
+                            {
+                                "price": {
+                                    "currency": "EUR",
+                                    "value": "50"
+                                },
+                                "title": "Tax"
+                            }
+                        ],
+                        "price": {
+                            "currency": "EUR",
+                            "value": "250"
+                        }
+                    },
+                    "type": "DEFAULT"
+                }
+            }
+        }
+    ]
+}

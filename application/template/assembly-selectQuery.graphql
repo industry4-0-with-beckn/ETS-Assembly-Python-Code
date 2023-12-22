@@ -1,0 +1,17 @@
+query{
+  inputs{
+    data{
+      attributes{
+        form_id
+        form_url
+        provider{
+          data{
+            attributes{
+              provider_name
+            }
+          }
+        }
+      }
+    }
+  }
+}

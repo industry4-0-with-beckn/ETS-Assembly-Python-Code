@@ -1,0 +1,11 @@
+query{
+	inputDetails{
+    data{
+      id
+      attributes{
+        form_data
+        form_id
+      }
+    }
+  }
+}

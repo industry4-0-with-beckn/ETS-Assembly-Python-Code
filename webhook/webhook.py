@@ -10,6 +10,7 @@ connect_url = 'http://localhost:5000/connect'
 load_dotenv()
 app = Flask(__name__)
 
+# Async function to read the request and send it to the application
 async def handler_asyn(body):
     try:
         ets_url = ''
@@ -69,12 +70,13 @@ async def handler_asyn(body):
     except Exception as err:
         print('The error is:',err)
 
+# Route function which is called from BppClient
 @app.route('/', methods=['POST'])
 def bpp_handler():
     try:
         print('Request received')
         body = request.get_json()
-        #print('Request body is: ', body)
+        print('Request body is: ', body)
         # Start the asynchronous task and immediately return the acknowledgment response
         asyncio.run(handler_asyn(body))
         return jsonify({
@@ -89,8 +91,6 @@ def bpp_handler():
         traceback.print_exc()  # Print the traceback for debugging
         print(err)
         return jsonify({'error': 'Internal Server Error'}, 500)
-
-
 
 @app.route('/ping', methods=['GET'])
 def ping():
