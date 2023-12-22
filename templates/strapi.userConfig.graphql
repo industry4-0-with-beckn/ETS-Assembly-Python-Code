@@ -1,0 +1,15 @@
+mutation {
+  createInputDetail(
+    data:{
+      form_id:"123456", form_data:{color:"RED", quantity:"10"}
+    } 
+  ){
+    data{
+      id
+      attributes{
+        form_id
+        form_data
+      }
+    }
+  }
+}

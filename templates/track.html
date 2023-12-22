@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Function to update Tracking_Status dynamically
+            function updateTrackingStatus() {
+                $.ajax({
+                    url: '/get_tracking_status',  // Endpoint to get the tracking status
+                    type: 'GET',
+                    success: function(response) {
+                        // Update the content with the new Tracking_Status value
+                        $('#trackingStatus').text('Tracking Status: ' + response.message);
+                    },
+                    error: function(error) {
+                        console.error('Error fetching tracking status:', error);
+                    }
+                });
+            }
+
+            // Update Tracking_Status every 2 seconds (adjust as needed)
+            setInterval(updateTrackingStatus, 2000);
+        });
+    </script>
+</head>
+<body>
+    <h1>Tracking Page</h1>
+    <!-- Display the Tracking_Status dynamically -->
+    <div id="trackingStatus"></div>
+</body>
+</html>

@@ -35,6 +35,7 @@ client_Press          = None
 root_Press            = None
 selected_quantity     = None
 Assembly_Status       = None
+Tracking_Status       = None
 order_lock = threading.Lock()
 
 webhook_url = 'https://9b57-194-95-60-104.ngrok-free.app/'
@@ -45,11 +46,29 @@ form_counter = 1
 
 @app.route('/config')
 def index():
-    return render_template('index.html')
+    return render_template('config.html')
 
 def confirm_order_async():
     thread = threading.Thread(target=confirm_order)
     thread.start()
+
+@app.route('/get_tracking_status', methods=['GET'])
+def get_tracking_status():
+    global Tracking_Status
+    return jsonify({'message': Tracking_Status})
+
+# Tracking Form
+@app.route('/track', methods=['GET', 'POST'])
+def track():
+    global Tracking_Status
+    Tracking_Status = "Real-Time Tracking"  
+    if request.method == 'POST':
+        # Retrieve the tracking status from the form submission
+        Tracking_Status = request.form.get('trackingStatusInput')
+        return jsonify({'message': Tracking_Status})
+        #return jsonify({'message': f'Tracking status updated to {Tracking_Status}'})
+
+    return render_template('track.html')
 
 @app.route('/status', methods=['POST'])
 def status():
@@ -92,27 +111,32 @@ def confirm_order():
 
 def process_order_dummy():
     global Assembly_Status
-    time.sleep(3)
-    Assembly_Status = "Assembly process started for the Order Number:  1234"
-    time.sleep(3)
-    Assembly_Status = "Process has started for Box Number 1234."
-    time.sleep(3)
-    Assembly_Status = "Palet is successfully moved to the handling process"
-    time.sleep(3)
-    Assembly_Status = "Handling process has started"
-    time.sleep(3)
+    global Tracking_Status
+    time.sleep(5)
+    Assembly_Status = "Order Received"
+    Tracking_Status = "Assembly process started"
+    time.sleep(5)
+    Assembly_Status = "In Progress"
+    Tracking_Status = "Process has started for Box Number 1234."
+    time.sleep(5)
+    Tracking_Status = "Palet is successfully moved to the handling process"
+    time.sleep(5)
+    Tracking_Status = "Handling process has started"
+    time.sleep(5)
     Assembly_Status = "Handling process has successfully completed" 
-    time.sleep(3)
-    Assembly_Status = "Lid pressing process has started" 
-    time.sleep(3)
-    Assembly_Status = "Lid pressing process has successfully completed"
-    time.sleep(3)
-    Assembly_Status = "The assembled box is successfully stored in the pallet storage"
-    time.sleep(3)
-    Assembly_Status = "Box Number 1234 is successfully assembled"
-    time.sleep(3)
-    Assembly_Status = "The Order number 1234 is successfully completed"
-    time.sleep(3)
+    time.sleep(5)
+    Tracking_Status = "Lid pressing process has started" 
+    time.sleep(5)
+    Tracking_Status = "Lid pressing process has successfully completed"
+    time.sleep(5)
+    Tracking_Status = "The assembled box is successfully stored in the pallet storage"
+    time.sleep(5)
+    Tracking_Status = "Container is successfully assembled"
+    time.sleep(5)
+    Tracking_Status = "The Order is successfully completed"
+    Assembly_Status = "Order Completed"
+    time.sleep(5)
+    Assembly_Status = "Order ready to pickup"
     return True
 
 def process_order():
@@ -294,6 +318,7 @@ def connect_opcua():
         availablity_check = False
     return availablity_check 
 @app.route('/submit', methods=['POST'])
+
 def submit():
     global form_counter
     global selected_color
@@ -377,5 +402,4 @@ if __name__ == '__main__':
     app.run(debug=False)
 
 
-    # def fetch_graphql_provider_data():
 

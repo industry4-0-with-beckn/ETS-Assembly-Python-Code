@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETS-Assembly Machine</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0; /* Light gray background */
+            text-align: center;
+        }
+
+        h2 {
+            color: #3498db; /* Blue color for heading */
+        }
+
+        form {
+            margin: 20px;
+            padding: 20px;
+            background-color: #ffffff; /* White background for the form */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #333;
+        }
+
+        select {
+            padding: 5px;
+        }
+
+        input[type="number"] {
+            padding: 5px;
+            margin-bottom: 10px; /* Added spacing between quantity and submit button */
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #2ecc71; /* Green color for submit button */
+            color: #ffffff; /* White text color for submit button */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Added style for left-aligning text */
+        .ets-description {
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>ETS-Assembly Machine</h2>
+    <form action="/submit" method="post">
+        <label for="color">Color of the Lid:</label>
+        <br>
+        <select id="color" name="color" required>
+            <option value="blue">Blue</option>
+            <option value="red">Red</option>
+        </select>
+        <br>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" required>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <!-- ETS Assembly Machine Description -->
+    <div class="ets-description" style="margin-top: 20px;">
+        <h3>ETS Assembly Machine Overview:</h3>
+        <p>Welcome to the ETS Assembly configuration page, where you have the power to customize your steel container lids
+            effortlessly. The ETS Assembly machine is designed to streamline the lid assembly process, ensuring precision
+            and efficiency.</p>
+
+        <strong>Process Overview:</strong>
+
+        <ol>
+            <li>
+                <strong>Container Placement:</strong>
+                <p>The Steel container is already ready and placed on the designated platform. The robust design of ETS
+                    Assembly ensures a stable foundation for the entire process.</p>
+            </li>
+
+            <li>
+                <strong>Lid Color Selection:</strong>
+                <p>Choose the color of your lid with options for vibrant blue or bold red. The selected color will add a
+                    personalized touch to your steel container.</p>
+            </li>
+
+            <li>
+                <strong>Quantity Specification:</strong>
+                <p>Specify the quantity of lids you require. Whether it's a small batch or a large production run, ETS
+                    Assembly adapts to your needs seamlessly.</p>
+            </li>
+
+            <li>
+                <strong>Precision Lid Pressing:</strong>
+                <p>Witness precision in action as the machine expertly presses the lid onto the steel container. Our
+                    advanced technology guarantees a secure and uniform fit every time.</p>
+            </li>
+
+            <li>
+                <strong>Quality Assurance:</strong>
+                <p>ETS Assembly is equipped with quality control measures to ensure each lid meets the highest standards.
+                    Expect durability and reliability in every assembly.</p>
+            </li>
+
+            <li>
+                <strong>Final Inspection:</strong>
+                <p>Before completion, the assembled containers undergo a final inspection to guarantee that they meet your
+                    specifications and adhere to our quality standards.</p>
+            </li>
+        </ol>
+
+        <p>Your custom-configured steel container lids from ETS Assembly are not just products; they're a testament to
+            precision engineering and attention to detail. Configure your lids now and experience the perfect blend of
+            form and function.</p>
+    </div>
+</body>
+
+</html>
