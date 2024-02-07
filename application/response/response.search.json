@@ -14,13 +14,13 @@
       "message_id": "bb579fb8-cb82-4824-be12-fcbc405b6608",
       "ttl": "PT30M",
       "timestamp": "2023-05-25T05:23:03.443Z",
-      "bpp_id": "bpp.supply-chain.makerspace.io",
-      "bpp_uri": "https://bpp.supply-chain.makerspace.io"
+      "bpp_id": "bpp.supply-chain.etsAssembly.io",
+      "bpp_uri": "https://bpp.supply-chain.etsAssembly.io"
   },
   "message": {
       "catalog": {
           "descriptor": {
-              "name": "Makerspace"
+              "name": "Assembly Service"
           },
           "providers": [
               {
@@ -28,13 +28,13 @@
                   "descriptor": {
                       "images": [
                           {
-                              "url": "https://makerspace/assembly/makerspace_logo.png",
+                              "url": "https://etsAssembly/assembly/ets_logo.png",
                               "size_type": "sm"
                           }
                       ],
-                      "name": "Makerspace",
-                      "short_desc": "Makerspace",
-                      "long_desc": "Makerspace, Hof."
+                      "name": "ETS",
+                      "short_desc": "ETS",
+                      "long_desc": "ETS Assembly, Hof."
                   },
                   "categories": [
                       {
@@ -93,7 +93,7 @@
                           "descriptor": {
                               "images": [
                                   {
-                                      "url": "https://makerspace/assembly/intermittent.png",
+                                      "url": "https://ets/assembly/intermittent.png",
                                       "size_type": "sm"
                                   }
                               ],

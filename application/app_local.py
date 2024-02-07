@@ -674,8 +674,8 @@ def status():
     fulfillments_status = fulfillments_confirm
     # Fetch the status from the Application
     fetch_graphql_select_data()
-    form_url  = select_data["data"]["inputs"]["data"][2]["attributes"]["form_url"] 
-    order_status = requests.post(form_url)
+    form_url          = select_data["data"]["inputs"]["data"][2]["attributes"]["form_url"] 
+    order_status      = requests.post(form_url)
     order_status_json = order_status.json()
     # Add the new attributes to the existing fulfillment
     fulfillments_status[0]["state"] = {
@@ -697,11 +697,11 @@ def status():
         response_data = json.load(json_file)
 
     # Update template_data with the providers list
-    response_data['context']['domain'] = domain_id
-    response_data['context']['bpp_id'] = provider_id
+    response_data['context']['domain']  = domain_id
+    response_data['context']['bpp_id']  = provider_id
     response_data['context']['bpp_uri'] = provider_uri
     response_data['context']['country'] = location_country
-    response_data['message']['order'] = status_obj
+    response_data['message']['order']   = status_obj
     return jsonify(response_data)
 
 # This function is to create the response structure for status as per Beckn format

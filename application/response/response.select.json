@@ -10,8 +10,8 @@
       "version": "1.1.0",
       "bap_uri": "https://supply-chain-protocol-network.becknprotocol.io/",
       "bap_id": "supply-chain-protocol.becknprotocol.io",
-      "bpp_id": "bpp.supply-chain.makerspace.io",
-      "bpp_uri": "https://bpp.supply-chain.makerspace.io",
+      "bpp_id": "bpp.supply-chain.ets.io",
+      "bpp_uri": "https://bpp.supply-chain.ets.io",
       "transaction_id": "a9aaecca-10b7-4d19-b640-b047a7c62195",
       "message_id": "13abc9ad-3d5e-4f68-83cb-d85f96b81cd5",
       "timestamp": "2023-05-25T05:23:03.443Z",
@@ -24,13 +24,13 @@
               "descriptor": {
                   "images": [
                       {
-                          "url": "https://makerspace/assembly/makerspace_logo.png",
+                          "url": "https://etsAssembly/assembly/ets_logo.png",
                           "size_type": "sm"
                       }
                   ],
-                  "name": "Makerspace",
-                  "short_desc": "Makerspace",
-                  "long_desc": "Makerspace, Hof."
+                  "name": "ets",
+                  "short_desc": "ets",
+                  "long_desc": "ets Assembly, Hof."
               }
           },
           "items": [
@@ -39,7 +39,7 @@
                   "descriptor": {
                       "images": [
                           {
-                              "url": "https://makerspace/assembly/intermittent.img",
+                              "url": "https://ets/assembly/intermittent.img",
                               "size_type": "sm"
                           }
                       ],

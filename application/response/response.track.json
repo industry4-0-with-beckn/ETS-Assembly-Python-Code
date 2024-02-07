@@ -3,8 +3,8 @@
         "domain": "supply-chain-services:assembly",
         "action": "on_track",
         "version": "1.1.0",
-        "bpp_id": "beckn-sandbox-bpp.becknprotocol.io",
-        "bpp_uri": "https://sandbox-bpp-network.becknprotocol.io/",
+        "bpp_id": "bpp.supply-chain.etsAssembly.io",
+        "bpp_uri": "https://bpp.supply-chain.etsAssembly.io",
         "country": "IND",
         "city": "std:080",
         "location": {

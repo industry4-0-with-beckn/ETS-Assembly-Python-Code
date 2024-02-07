@@ -3,8 +3,8 @@
         "domain": "supply-chain-services:assembly",
         "action": "on_init",
         "version": "1.1.0",
-        "bpp_id": "beckn-sandbox-bpp.becknprotocol.io",
-        "bpp_uri": "https://sandbox-bpp-network.becknprotocol.io/",
+        "bpp_id": "bpp.supply-chain.etsAssembly.io",
+        "bpp_uri": "https://bpp.supply-chain.etsAssembly.io",
         "country": "IND",
         "city": "std:080",
         "location": {
@@ -23,9 +23,9 @@
         "order": {
             "provider": {
                 "descriptor": {
-                    "name": "Makerspace",
-                    "short_desc": "Makerspace",
-                    "long_desc": "Makerspace, Hof",
+                    "name": "ets",
+                    "short_desc": "ets",
+                    "long_desc": "ets Assembly, Hof",
                     "images": [
                         {
                             "url": "https://images.pexels.com/photos/5532668/pexels-photo-5532668.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -41,7 +41,7 @@
                     "descriptor": {
                         "images": [
                             {
-                                "url": "https://makerspace/assembly/intermittent.img",
+                                "url": "https://ets/assembly/intermittent.img",
                                 "size_type": "sm"
                             }
                         ],
